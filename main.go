@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 const (
@@ -15,9 +16,22 @@ const (
 	tmplPath string = "tmpl"
 )
 
+var validLink = regexp.MustCompile(`\[[a-zA-Z0-9]+\]`)
+
 type Page struct {
 	Title string
 	Body  []byte
+}
+
+func (p *Page) HTMLBody() template.HTML {
+	escaped := template.HTMLEscapeString(string(p.Body))
+	linked := validLink.ReplaceAllStringFunc(escaped, func(match string) string {
+		title := match[1 : len(match)-1]
+		return fmt.Sprintf(`<a href="/view/%s">%s</a>`, title, title)
+	})
+	linkedWithNewlines := strings.ReplaceAll(linked, "\n", "<br>")
+
+	return template.HTML(linkedWithNewlines)
 }
 
 func (p *Page) save() error {
