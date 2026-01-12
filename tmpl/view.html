@@ -1,5 +1,13 @@
-<h1>{{.Title}}</h1>
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>{{.Title}}</title>
+    </head>
+    <body>
+        <h1>{{.Title}}</h1>
 
-<p>[<a href="/edit/{{.Title}}">edit</a>]</p>
+        <p>[<a href="/edit/{{.Title}}">edit</a>]</p>
 
-<div>{{printf "%s" .Body}}</div>
+        <div>{{printf "%s" .Body}}</div>
+    </body>
+</html>

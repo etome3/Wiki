@@ -70,6 +70,10 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	http.Redirect(w, r, "/view/"+title, http.StatusFound)
 }
 
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
+}
+
 var tmplEdit = filepath.Join(tmplPath, "edit.html")
 var tmplView = filepath.Join(tmplPath, "view.html")
 var templates = template.Must(template.ParseFiles(tmplEdit, tmplView))
@@ -97,6 +101,7 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 
 func main() {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/view/", makeHandler(viewHandler))
 	mux.HandleFunc("/edit/", makeHandler(editHandler))
 	mux.HandleFunc("/save/", makeHandler(saveHandler))
